@@ -200,7 +200,7 @@ struct Token {
         switch (type) {
             case INT_LITERAL:
                 return std::string("INT_LITERAL(") +
-                       std::string(int_literal) + std::string(")");
+                       int_literal.convert_to<std::string>() + std::string(")");
             case QUOTED_STRING:
                 return std::string("QUOTED_STRING(") + s + std::string(")");
             case IDENT:
@@ -300,7 +300,7 @@ struct Token {
             case IDENT:
                         return s;
             case INT_LITERAL:
-                        return std::string(int_literal);
+                        return int_literal.convert_to<std::string>();
             case QUOTED_STRING:
                         return std::string("\"") + QuoteString(s) + std::string("\"");
             case LEXERERROR:
@@ -628,7 +628,7 @@ class LexerImpl : public Lexer {
             try {
                 Token::bignum n(s);
                 return n;
-            } catch (std::runtime_error) {
+            } catch (std::runtime_error& e) {
                 Token::bignum n(0);
                 return n;
             }

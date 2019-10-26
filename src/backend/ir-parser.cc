@@ -339,9 +339,9 @@ unique_ptr<IRProgram> IRProgram::Parse(const std::string& filename,
 
     unique_ptr<IRProgram> ptr(new IRProgram);
     if (parse.ParseProgram(ptr.get()) && !collector->HasErrors()) {
-        return move(ptr);
+        return ptr;
     } else {
         ptr.reset();
-        return move(ptr);
+        return ptr;
     }
 }

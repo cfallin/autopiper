@@ -182,7 +182,7 @@ void VerilogGenerator::GenerateNode(const IRStmt* stmt) {
                 out_->Print("wire [$width$-1:0] $portname$;\n");
             }
             if (stmt->port_has_default) {
-                out_->SetVar("default", string(stmt->port_default)); 
+                out_->SetVar("default", stmt->port_default.convert_to<std::string>());
                 out_->Print("assign $portname$ = $predicate$ ? $arg$ : $default$;\n");
             } else {
                 out_->Print("assign $portname$ = $arg$;\n");
@@ -429,7 +429,7 @@ void VerilogGenerator::GenerateNodeExpr(const IRStmt* stmt,
     // Have vars: $signal$, $width$
     switch (stmt->op) {
         case IRStmtOpConst:
-            out_->SetVar("const", string(stmt->constant));
+            out_->SetVar("const", stmt->constant.convert_to<std::string>());
             out_->Print("assign $signal$ = $width$'d$const$;\n");
             break;
         case IRStmtOpAdd:
@@ -466,8 +466,8 @@ void VerilogGenerator::GenerateNodeExpr(const IRStmt* stmt,
         case IRStmtOpBitslice:
             out_->SetVars({
                 { "arg", args[0] },
-                { "top", string(stmt->args[1]->constant) },
-                { "bot", string(stmt->args[2]->constant) },
+                { "top", stmt->args[1]->constant.convert_to<std::string>() },
+                { "bot", stmt->args[2]->constant.convert_to<std::string>() },
             });
             out_->Print("assign $signal$ = $arg$[$top$:$bot$];\n");
             break;
